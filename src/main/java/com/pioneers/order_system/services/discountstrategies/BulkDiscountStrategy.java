@@ -1,6 +1,6 @@
 package com.pioneers.order_system.services.discountstrategies;
 
-import com.pioneers.order_system.models.entities.Order;
+import com.pioneers.order_system.entities.Order;
 import org.springframework.stereotype.Component;
 
 /**
@@ -15,6 +15,6 @@ public class BulkDiscountStrategy implements DiscountStrategy {
 
     @Override
     public boolean isApplicable(Order order) {
-        return order.getOrderedItems().size() >= 10;
+        return order.getItems().size() >= 10;
     }
 }

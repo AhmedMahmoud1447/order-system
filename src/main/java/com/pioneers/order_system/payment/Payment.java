@@ -1,6 +1,6 @@
-package com.pioneers.order_system.utils;
+package com.pioneers.order_system.payment;
 
-import com.pioneers.order_system.models.entities.Order;
+import com.pioneers.order_system.entities.Order;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -14,5 +14,4 @@ public class Payment {
         System.out.println("Processing payment for Order ID: " + order.getId() +
                 " via " + order.getPaymentMethod());
     }
-
 }

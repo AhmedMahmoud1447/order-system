@@ -1,7 +1,7 @@
 package com.pioneers.order_system.services.discountstrategies;
 
-import com.pioneers.order_system.models.entities.Order;
-import com.pioneers.order_system.models.enums.CustomerType;
+import com.pioneers.order_system.entities.Order;
+import com.pioneers.order_system.enums.CustomerType;
 import org.springframework.stereotype.Component;
 
 /**

@@ -1,6 +1,6 @@
 package com.pioneers.order_system.services.discountstrategies;
 
-import com.pioneers.order_system.models.entities.Order;
+import com.pioneers.order_system.entities.Order;
 
 /**
  * Interface for discount strategies. Each strategy must implement the calculate method to determine the discount amount

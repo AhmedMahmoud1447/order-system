@@ -1,4 +1,4 @@
-package com.pioneers.order_system.exceptions;
+package com.pioneers.order_system.errors.models;
 
 import lombok.Builder;
 import lombok.Getter;

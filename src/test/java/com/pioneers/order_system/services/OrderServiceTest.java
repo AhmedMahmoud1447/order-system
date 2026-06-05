@@ -1,13 +1,13 @@
 package com.pioneers.order_system.services;
 
-import com.pioneers.order_system.exceptions.BadRequestException;
-import com.pioneers.order_system.models.dtos.orderdtos.OrderRequest;
-import com.pioneers.order_system.models.dtos.orderdtos.OrderResponse;
-import com.pioneers.order_system.models.entities.Order;
-import com.pioneers.order_system.models.entities.Product;
-import com.pioneers.order_system.models.enums.CustomerType;
-import com.pioneers.order_system.models.enums.PaymentMethod;
-import com.pioneers.order_system.models.mappers.OrderMapper;
+import com.pioneers.order_system.errors.exceptions.BadRequestException;
+import com.pioneers.order_system.dtos.orderdtos.OrderRequest;
+import com.pioneers.order_system.dtos.orderdtos.OrderItemRequest;
+import com.pioneers.order_system.entities.Order;
+import com.pioneers.order_system.entities.Product;
+import com.pioneers.order_system.enums.CustomerType;
+import com.pioneers.order_system.enums.PaymentMethod;
+import com.pioneers.order_system.mappers.OrderMapper;
 import com.pioneers.order_system.repositories.OrderRepository;
 import com.pioneers.order_system.repositories.ProductRepository;
 import com.pioneers.order_system.services.discountstrategies.DiscountStrategy;
@@ -35,16 +35,16 @@ class OrderServiceTest {
     @Mock
     private ProductRepository productRepository;
     @Mock
-    private OrderMapper orderMapper;
-    @Mock
     private DiscountStrategy discountStrategy;
 
+    private OrderMapper orderMapper;
     private OrderService orderService;
 
     @BeforeEach
     void setUp() {
         List<DiscountStrategy> strategies = new ArrayList<>();
         strategies.add(discountStrategy);
+        orderMapper = new OrderMapper(productRepository);
         orderService = new OrderService(productRepository, orderRepository, orderMapper, strategies);
     }
 
@@ -53,7 +53,11 @@ class OrderServiceTest {
     @Test
     void createOrderWithValidRequest() {
         // 1. Arrange
-        OrderRequest request = new OrderRequest("Ziad", CustomerType.VIP, PaymentMethod.CASH, List.of(10L));
+        OrderItemRequest itemRequest = OrderItemRequest.builder().productId(10L).quantity(1).build();
+        OrderRequest request = new OrderRequest();
+        request.setCustomerId(1L);
+        request.setItems(List.of(itemRequest));
+
         Long productId = 10L;
         Product product = new Product();
         product.setId(productId);
@@ -68,7 +72,7 @@ class OrderServiceTest {
         when(discountStrategy.calculate(any())).thenReturn(10.0);
 
         when(orderRepository.save(any())).thenAnswer(i -> i.getArgument(0));
-        when(orderMapper.toResponse(any())).thenReturn(new OrderResponse(1L, "Ziad", 100.0, 10.0, 90.0));
+//        when(orderMapper.toResponse(any())).thenReturn(new OrderResponse(1L, "Ziad", 100.0, 10.0, 90.0));
 
         // 2. Act
         orderService.createOrder(request);
@@ -89,7 +93,11 @@ class OrderServiceTest {
     @Test
     void throwExceptionWhenProductIsOutOfStock() {
         //Arrange
-        OrderRequest request = new OrderRequest("Ziad", CustomerType.VIP, PaymentMethod.CASH, List.of(10L));
+        OrderItemRequest itemRequest = OrderItemRequest.builder().productId(10L).quantity(1).build();
+        OrderRequest request = new OrderRequest();
+        request.setCustomerId(1L);
+        request.setItems(List.of(itemRequest));
+
         Long productId = 10L;
         Product outOfStockProduct = new Product();
         outOfStockProduct.setStockQuantity(0); // خلصان
@@ -103,5 +111,7 @@ class OrderServiceTest {
         verify(orderRepository, never()).save(any());
     }
 }
+
+
 
 

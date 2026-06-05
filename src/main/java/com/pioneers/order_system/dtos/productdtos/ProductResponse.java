@@ -1,4 +1,4 @@
-package com.pioneers.order_system.models.dtos.productdtos;
+package com.pioneers.order_system.dtos.productdtos;
 
 import lombok.Value;
 

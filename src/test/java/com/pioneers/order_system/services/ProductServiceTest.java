@@ -1,9 +1,9 @@
 package com.pioneers.order_system.services;
 
-import com.pioneers.order_system.models.dtos.productdtos.ProductRequest;
-import com.pioneers.order_system.models.entities.Product;
+import com.pioneers.order_system.errors.exceptions.ResourceNotFoundException;
+import com.pioneers.order_system.dtos.productdtos.ProductRequest;
+import com.pioneers.order_system.entities.Product;
 import com.pioneers.order_system.repositories.ProductRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -14,7 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
-import static com.pioneers.order_system.models.mappers.ProductMapper.toEntity;
+import static com.pioneers.order_system.mappers.ProductMapper.toProduct;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -31,11 +31,15 @@ class ProductServiceTest {
     @Nested
     @DisplayName("Positive Tests")
     class PositiveTests {
+
         @Test
         void should_CreateProduct() {
             ProductRequest productRequest = new ProductRequest(1L,"Test Product", 10.0, 100);
-            when(productRepository.save(any())).thenReturn(toEntity(productRequest));
-            Product product = productService.createProduct(productRequest);
+
+            when(productRepository.save(any())).thenReturn(toProduct(productRequest));
+
+            Product product = productService.addProduct(productRequest);
+
             assertNotNull(product);
             assertEquals(productRequest.getName(), product.getName());
             assertEquals(productRequest.getPrice(), product.getPrice());
@@ -46,8 +50,8 @@ class ProductServiceTest {
         void shouldgGetProductById() {
             Long id = 1L;
             ProductRequest productRequest = new ProductRequest(id,"Test Product", 10.0, 100);
-            when(productRepository.findById(id)).thenReturn(java.util.Optional.of(toEntity(productRequest)));
-            var productResponse = productService.getProductById(id);
+            when(productRepository.findById(id)).thenReturn(java.util.Optional.of(toProduct(productRequest)));
+            var productResponse = productService.findProductById(id);
             assertNotNull(productResponse);
             assertEquals(productRequest.getName(), productResponse.getName());
             assertEquals(productRequest.getPrice(), productResponse.getPrice());
@@ -76,7 +80,7 @@ class ProductServiceTest {
                 Long id = 1L;
                 ProductRequest productRequest = new ProductRequest(id,"Test Product", 10.0, 100);
                 when(productRepository.findById(id)).thenReturn(java.util.Optional.empty());
-                assertThrows(com.pioneers.order_system.exceptions.ResourceNotFoundException.class, () -> productService.getProductById(id));
+                assertThrows(ResourceNotFoundException.class, () -> productService.findProductById(id));
             }
         }
 

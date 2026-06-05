@@ -1,6 +1,5 @@
-package com.pioneers.order_system.models.dtos.orderdtos;
+package com.pioneers.order_system.dtos.orderdtos;
 import lombok.Builder;
-import lombok.Data;
 
 @Builder
  public record OrderResponse (
