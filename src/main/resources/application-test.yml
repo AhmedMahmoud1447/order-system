@@ -1,0 +1,12 @@
+server:
+  port: 8081
+
+logging:
+  level:
+    root: INFO
+    org.springframework.test: DEBUG
+
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
