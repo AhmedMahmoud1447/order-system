@@ -19,14 +19,14 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping("/create")
-    @PreAuthorize("hasRole('CUSTOMER')") // 👈 قفل: الزبون فقط هو من يصنع أوردر
+    @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<OrderResponse> createOrder(@Valid @RequestBody OrderRequest request) {
         OrderResponse response = orderService.createOrder(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @GetMapping("/{id}") // 👈 تعديل بسيط: أضفنا السلاش النواقص / لضمان دقة الرابط
-    @PreAuthorize("hasAnyRole('ADMIN', 'CUSTOMER')") // 👈 قفل: الزبون يشوف أوردره، والأدمن يتابع الأوردرات
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'CUSTOMER')")
     public ResponseEntity<OrderResponse> getOrderById(@PathVariable long id) {
         OrderResponse response = orderService.findOrderById(id);
         return new ResponseEntity<>(response, HttpStatus.OK);

@@ -14,7 +14,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-// ...existing code...
 
 @Configuration
 @RequiredArgsConstructor
@@ -23,10 +22,10 @@ public class ApplicationConfig {
     private final UserRepository userRepository;
 
     @Bean
-    public UserDetailsService customUserDetailsService() { // 👈 غيرنا الاسم هنا تماماً
+    public UserDetailsService customUserDetailsService() {
         return username -> userRepository.findByEmail(username)
                 .map(SecurityUser::new)
-                .orElseThrow(() -> new UsernameNotFoundException("المستخدم غير موجود: " + username));
+                .orElseThrow(() -> new UsernameNotFoundException(username + " not found"));
     }
 
     @Bean

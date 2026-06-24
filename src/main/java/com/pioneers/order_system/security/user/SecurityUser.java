@@ -12,7 +12,6 @@ public class SecurityUser implements UserDetails {
 
     private final User user;
 
-    // 👈 هذا هو الـ Constructor الجوهري الذي يحل الخطأ الأحمر!
     public SecurityUser(User user) {
         this.user = user;
     }

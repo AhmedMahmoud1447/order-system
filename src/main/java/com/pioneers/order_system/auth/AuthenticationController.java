@@ -14,13 +14,11 @@ public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
 
-    // 🚪 رابط التسجيل: POST http://localhost:8080/api/auth/register
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(@RequestBody AuthenticationRequest request) {
         return ResponseEntity.ok(authenticationService.register(request));
     }
 
-    // 🔑 رابط تسجيل الدخول: POST http://localhost:8080/api/auth/login
     @PostMapping("/login")
     public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
         return ResponseEntity.ok(authenticationService.authenticate(request));

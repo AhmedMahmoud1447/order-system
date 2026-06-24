@@ -23,7 +23,7 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity // تفعيل الحماية الدقيقة فوق الميثودز مثل @PreAuthorize
+@EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 
@@ -35,35 +35,32 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // تفعيل الـ CORS
-                .csrf(AbstractHttpConfigurer::disable) // تعطيل الـ CSRF لأننا Stateless (JWT)
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll() // فتح روابط التسجيل واللوجن للجميع
+                        .requestMatchers("/api/auth/**").permitAll()
 
-                        // 🔐 التعديل والـ Best Practice هنا:
-                        .requestMatchers("/api/products/**").authenticated() // تأمين الـ Products بعد تعديل الـ URL
-                        .requestMatchers("/api/orders/**").authenticated()   // تأمين الـ Orders
+                        .requestMatchers("/api/products/**").authenticated()
+                        .requestMatchers("/api/orders/**").authenticated()
 
-                        .anyRequest().authenticated() // أي رابط آخر يجب أن يكون مسجلاً
+                        .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
 
-                // إدارة الـ Logout الآمنة
                 .logout(logout -> logout
                         .logoutUrl("/api/auth/logout")
                         .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
                 )
                 .exceptionHandling(exception -> exception
-                        .authenticationEntryPoint(authenticationEntryPoint) // لعلاج الـ 401 (Unauthenticated)
-                        .accessDeniedHandler(accessDeniedHandler)           // لعلاج الـ 403 (Unauthorized)
+                        .authenticationEntryPoint(authenticationEntryPoint)
+                        .accessDeniedHandler(accessDeniedHandler)
                 );
 
         return http.build();
     }
 
-    // 🌐 إعدادات الـ CORS لفتح الباب لتطبيق الـ Angular (بورت 4200)
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();

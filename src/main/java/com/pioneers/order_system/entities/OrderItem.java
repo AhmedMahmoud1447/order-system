@@ -17,7 +17,7 @@ public class OrderItem {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", nullable = false) // مطابق للـ FK في ليكوبيز
+    @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
     @Column(nullable = false)
@@ -27,6 +27,6 @@ public class OrderItem {
     private Double priceAtPurchase;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id", nullable = false) // مطابق للـ FK في ليكوبيز
+    @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 }

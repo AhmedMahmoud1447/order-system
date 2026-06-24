@@ -46,27 +46,23 @@ public class OrderService {
         double rawTotalPrice = 0.0;
         List<Product> productsToUpdate = new ArrayList<>();
 
-        // نقوم بالمرور على الـ Items المرسلة في الـ Request
         for (var itemRequest : request.getItems()) {
             Product product = productRepository.findById(itemRequest.getProductId())
                     .orElseThrow(() -> {
                         log.warn("Order failed: Product ID {} not found", itemRequest.getProductId());
-                        return new ResourceNotFoundException("Product with id: " + itemRequest.getProductId() + " is not found!");
+                        return new ResourceNotFoundException("Product with id: " + itemRequest.getProductId() +
+                                " is not found!");
                     });
 
-            // 1. التحقق من المخزن بناءً على الكمية المطلوبة فعلياً
             validateAndCalculateStock(product, itemRequest.getQuantity());
 
-            // 2. إنشاء كائن الـ OrderItem وتثبيت السعر الحالي
             OrderItem orderItem = new OrderItem();
             orderItem.setProduct(product);
             orderItem.setQuantity(itemRequest.getQuantity());
-            orderItem.setPriceAtPurchase(product.getPrice()); // السعر الحالي حُمي تماماً هنا
+            orderItem.setPriceAtPurchase(product.getPrice());
 
-            // 3. ربط الـ OrderItem بالـ Order باستخدام الـ Helper Method
             newOrder.addOrderItem(orderItem);
 
-            // 4. حساب السعر الإجمالي الكلي (السعر * الكمية)
             rawTotalPrice += product.getPrice() * itemRequest.getQuantity();
 
             productsToUpdate.add(product);
@@ -75,7 +71,6 @@ public class OrderService {
         newOrder.setTotalPrice(rawTotalPrice);
         log.debug("Raw total price calculated: {}", rawTotalPrice);
 
-        // 5. تطبيق الـ Strategy Pattern للخصومات
         log.debug("Applying discount strategies for order");
         double totalDiscount = discountStrategies.stream()
                 .filter(strategy -> strategy.isApplicable(newOrder))
@@ -85,9 +80,8 @@ public class OrderService {
         newOrder.setDiscountAmount(totalDiscount);
         log.info("Total discount applied: {}", totalDiscount);
 
-        // 6. معالجة الدفع وحفظ البيانات دفعة واحدة (Batch Update للمنتجات)
         processPayment(newOrder);
-        productRepository.saveAll(productsToUpdate); // حفظ جماعي أسرع بمليون مرة في الأداء من الـ Loop
+        productRepository.saveAll(productsToUpdate);
 
         return orderRepository.save(newOrder);
     }

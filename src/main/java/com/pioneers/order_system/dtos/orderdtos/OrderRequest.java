@@ -4,9 +4,8 @@ import lombok.Data;
 
 import java.util.List;
 @Data
-// داخل OrderRequest.java
 public class OrderRequest {
-    private Long customerId; // أو الـ Type بناءً على التصميم
+    private Long customerId;
     private List<OrderItemRequest> items;
 }
 

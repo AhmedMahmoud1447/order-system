@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "users") // اسم الجدول في الداتابيز
+@Table(name = "users")
 @Data
 @Builder
 @AllArgsConstructor
@@ -19,12 +19,12 @@ public class User {
     private Long id;
 
     @Column(unique = true, nullable = false)
-    private String email; // سنستخدم الإيميل كـ Username لتسجيل الدخول
+    private String email;
 
     @Column(nullable = false)
-    private String password; // الباسورد المشفرة
+    private String password;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Role role; // رتبة المستخدم (ADMIN أو CUSTOMER)
+    private Role role;
 }

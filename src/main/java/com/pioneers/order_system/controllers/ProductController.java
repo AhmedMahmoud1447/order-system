@@ -12,32 +12,32 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 
-import org.springframework.security.access.prepost.PreAuthorize; // الأنوتيشن الحتمية
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/products") // 👈 تعديل: أضفنا /api لتصبح متناسقة مع السيستم
+@RequestMapping("/api/products")
 public class ProductController {
 
     private final ProductService productService;
 
     @PostMapping("/create")
-    @PreAuthorize("hasRole('ADMIN')") // 👈 قفل: الأدمن فقط من يضيف منتج
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> createProductApi(@Valid @RequestBody ProductRequest productRequest) {
         productService.addProduct(productRequest);
-        return new ResponseEntity<>(HttpStatus.CREATED); // الـ Void متناسق هنا طالما لا نرجع بادي
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'CUSTOMER')") // 👈 تعديل أمني: الأدمن يشوفه والزبون يشوفه عشان يشتريه
+    @PreAuthorize("hasAnyRole('ADMIN', 'CUSTOMER')")
     public ResponseEntity<ProductResponse> findProductByIdApi(@PathVariable long id) {
         ProductResponse productResponse = productService.findProductById(id);
         return ResponseEntity.ok(productResponse);
     }
 
     @GetMapping("/low-stock")
-    @PreAuthorize("hasRole('ADMIN')") // 👈 قفل: صاحب المطعم/الأدمن فقط من يراقب المخزون المنخفض
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<ProductResponse>> getProductByLowStock(@RequestParam int value) {
         return ResponseEntity.ok(productService.getLowStockProducts(value));
     }

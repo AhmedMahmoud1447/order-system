@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "orders") // ضروري جداً عشان اسم الجمع والكلمة المحجوزة
+@Table(name = "orders")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -20,7 +20,7 @@ public class Order {
 
     private String customerName;
 
-    @Enumerated(EnumType.STRING) // عشان يتسجل كـ String في الداتابيز
+    @Enumerated(EnumType.STRING)
     private CustomerType customerType;
 
     @Enumerated(EnumType.STRING)

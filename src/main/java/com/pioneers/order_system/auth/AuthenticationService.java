@@ -21,27 +21,22 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    // 1️⃣ منطق إنشاء حساب جديد
     public AuthenticationResponse register(AuthenticationRequest request) {
-        // تأكد أولاً أن الإيميل غير مكرر (يمكنك رمي BadRequestException هنا لو مكرر)
 
         User user = new User();
         user.setEmail(request.getEmail());
-        user.setPassword(passwordEncoder.encode(request.getPassword())); // 👈 تشفير الباسورد حتماً!
-        user.setRole(Role.CUSTOMER); // الافتراضي زبون، ويمكنك تعديلها حسب الحاجة
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setRole(Role.CUSTOMER);
 
         userRepository.save(user);
 
-        // توليد التوكن فوراً بعد التسجيل ليدخل السيستم مباشرة
         var securityUser = new SecurityUser(user);
         var jwtToken = jwtService.generateToken(securityUser);
 
         return AuthenticationResponse.builder().token(jwtToken).build();
     }
 
-    // 2️⃣ منطق تسجيل الدخول والتحقق
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        // الـ AuthenticationManager هو الذي يقوم بالمقارنة خلف الستار ويرمي Exception لو الباسورد غلط
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
@@ -49,7 +44,6 @@ public class AuthenticationService {
                 )
         );
 
-        // لو وصلنا هنا، فهذا يعني أن الباسورد صحيحة 100%
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid email or password."));
 

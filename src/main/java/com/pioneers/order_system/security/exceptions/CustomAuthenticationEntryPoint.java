@@ -22,12 +22,11 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
             AuthenticationException authException
     ) throws IOException, ServletException {
 
-        // إعداد استجابة الـ JSON النظيفة للفرونتد
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401
 
         String jsonBody = String.format(
-                "{\"status\": %d, \"message\": \"عذراً، يجب عليك تسجيل الدخول أولاً للوصول إلى هذا الرابط.\", \"timestamp\": \"%s\", \"path\": \"%s\"}",
+                "{\"status\": %d, \"message\": \"Sorry you must log in first.\", \"timestamp\": \"%s\", \"path\": \"%s\"}",
                 HttpServletResponse.SC_UNAUTHORIZED,
                 LocalDateTime.now(),
                 request.getRequestURI()

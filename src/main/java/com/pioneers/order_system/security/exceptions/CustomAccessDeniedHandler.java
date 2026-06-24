@@ -21,12 +21,11 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
             AccessDeniedException accessDeniedException
     ) throws IOException, ServletException {
 
-        // إعداد استجابة الـ JSON النظيفة للفرونتد
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(HttpServletResponse.SC_FORBIDDEN); // 403
 
         String jsonBody = String.format(
-                "{\"status\": %d, \"message\": \"عذراً، لا تملك الصلاحيات الكافية لتنفيذ هذا الإجراء.\", \"timestamp\": \"%s\", \"path\": \"%s\"}",
+                "{\"status\": %d, \"message\": \"Sorry you don't have the required permissions\", \"timestamp\": \"%s\", \"path\": \"%s\"}",
                 HttpServletResponse.SC_FORBIDDEN,
                 LocalDateTime.now(),
                 request.getRequestURI()
