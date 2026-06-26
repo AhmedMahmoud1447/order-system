@@ -1,6 +1,6 @@
 # Order Management System
 
-A modern, enterprise-grade order management system built with Spring Boot 4 and Java 21, providing secure REST APIs for managing orders, products, and customer transactions with advanced discount strategies and payment processing.
+A modern Order Management System built with Spring Boot 4 and Java 21. It features JWT-based authentication, role-based access control (RBAC), a Strategy Pattern implementation for discount calculation, centralized exception handling, PostgreSQL, Liquibase database migrations, and RESTful APIs.
 
 ## 📋 Table of Contents
 
