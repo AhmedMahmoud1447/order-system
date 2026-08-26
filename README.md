@@ -58,16 +58,6 @@ The Order Management System is a comprehensive backend application designed to h
 - Customer type-based discounting
 - Order status tracking
 
-### 💰 Payment Processing
-- Secure payment handling
-- Multiple payment methods support:
-  - Credit Card
-  - Debit Card
-  - PayPal
-  - Bank Transfer
-  - Cash
-- Order finalization with payment
-
 ### 🎁 Discount Strategies
 - **VIP Discount**: 20% discount for VIP customers
 - **Bulk Discount**: 10% discount for orders with 10+ items
