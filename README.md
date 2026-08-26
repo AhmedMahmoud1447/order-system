@@ -28,7 +28,6 @@ The Order Management System is a comprehensive backend application designed to h
 - **Product Management**: Admin-controlled product catalog with inventory tracking
 - **Order Processing**: Customer order creation with automatic discount calculation
 - **Dynamic Discount Strategies**: VIP and bulk order discounts based on customer type
-- **Payment Integration**: Streamlined payment processing for orders
 - **Database Versioning**: Liquibase-based schema management with PostgreSQL
 
 ---
